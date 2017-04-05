@@ -4,6 +4,7 @@ Python implementation of the wrapped kalman filter for bearing tracking
 The wrapped Kalman filter infers the hidden state of a linear 
 determinate system where the state lies on the unit circle. 
 
+author: Alex Pollara
 
 Algorithm is described in:
     "A Wrapped Kalman Filter for Azimuthal Speaker Tracking"
