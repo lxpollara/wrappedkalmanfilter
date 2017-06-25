@@ -16,6 +16,15 @@ from numpy import matrix, square, exp, sqrt, pi, array, eye
 from numpy.linalg import inv
 
 
+def wrap(x):
+    """
+    :param x: float
+    :return: float
+    """
+    # returns the value of an angle wrapped around the unit circle
+    return ((x + pi) % (2 * pi)) - pi
+
+
 class WrappedKalman:
     def __init__(self, x0, dt, cov, var, l=1, v0=0.0):
         """
@@ -35,14 +44,6 @@ class WrappedKalman:
         self.state = matrix([[x0], [v0]])    # current state
         self.predictions = [self.state]     # historical states
 
-    def wrap(self, x):
-        """
-        :param x: float
-        :return: float
-        """
-        # returns the value of an angle wrapped around the unit circle
-        return ((x + pi) % (2 * pi)) - pi
-
     def step(self, y):
         """
         :param y: float
@@ -52,7 +53,7 @@ class WrappedKalman:
         # state prediction
         state_est = self.A * self.state
         # wrap predicted state
-        state_est[0, 0] = self.wrap(state_est[0, 0])
+        state_est[0, 0] = wrap(state_est[0, 0])
         # estimate covariance
         c_est = self.A * self.C * self.A.T + self.cov
 
@@ -74,7 +75,7 @@ class WrappedKalman:
         # update state
         self.state = state_est + K * g
         # wrap predicted state
-        self.state[0, 0] = self.wrap(self.state[0, 0])
+        self.state[0, 0] = wrap(self.state[0, 0])
         # update covariance
         self.cov = (eye(self.cov.shape[0]) - K * self.B) * c_est
 
